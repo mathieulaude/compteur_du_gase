@@ -610,7 +610,7 @@ class ProviderOrdersListView(ProviderRelatedViewMixin, ListView):
         return self.model.objects.filter(product__provider=self.provider).appros_only().order_by('-date')
 
     def build_orders_list(self) -> Iterable[Order]:
-        """ Regrouppe les appros par date
+        """ Regroupe les appros par date
 
         Et calcule le coût d'achat de chaque « commande »
         """
@@ -621,7 +621,7 @@ class ProviderOrdersListView(ProviderRelatedViewMixin, ListView):
                 if order:
                     yield order
                 order = self.Order(date=appro.date.date())
-            order.total_purchase_cost += appro.purchase_cost
+            order.total_purchase_cost += appro.effective_price()
             order.appros.append(appro)
 
         if order:
